@@ -6,7 +6,7 @@ class Tutorial extends Phaser.Scene {
     preload() {
         this.player = new Player(this, -100, -100).preload();
         this.enemy1 = new BlueSlime(this, 400, 100, this.player).preload();
-        this.enemy2 = new BlueSlime(this, 300, -200, this.player).preload();
+        this.enemy2 = new PinkSlime(this, 300, -200, this.player).preload();
         this.enemy3 = new GreenSlime(this, -200, 100, this.player).preload();
 
         this.load.image("tileset", "assets/tileset.png");

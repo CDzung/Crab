@@ -8,14 +8,9 @@ class BlueSlime extends Enemy {
     }
 
     preload() {
-        this.scene.load.spritesheet("slime-spritesheet", "assets/slime-Sheet.png", {
+        this.scene.load.spritesheet("spritesheet-blue-slime", "assets/spritesheet-blue-slime.png", {
             frameWidth: 32,
             frameHeight: 25
-        });
-
-        this.scene.load.spritesheet("green-slime", "assets/Slime_Sapp_Sheet_01.png", {
-            frameWidth: 96,
-            frameHeight: 112
         });
 
         return this;
@@ -23,33 +18,29 @@ class BlueSlime extends Enemy {
 
     create() {
         this.scene.anims.create({
-            key: "normal",
+            key: "blue-slime-normal",
             frameRate: 10,
             repeat: -1,
-            frames: this.scene.anims.generateFrameNumbers("slime-spritesheet", { start: 0, end: 3 })
+            frames: this.scene.anims.generateFrameNumbers("spritesheet-blue-slime", { start: 0, end: 3 })
         });
 
         this.scene.anims.create({
-            key: "move",
+            key: "blue-slime-move",
             frameRate: 10,
             repeat: -1,
-            frames: this.scene.anims.generateFrameNumbers("slime-spritesheet", { start: 4, end: 7 })
+            frames: this.scene.anims.generateFrameNumbers("spritesheet-blue-slime", { start: 4, end: 7 })
         });
 
         this.scene.anims.create({
-            key: "hit",
+            key: "blue-slime-attack",
             frameRate: 10,
-            frames: this.scene.anims.generateFrameNumbers("slime-spritesheet", { start: 8, end: 11 })
+            frames: this.scene.anims.generateFrameNumbers("spritesheet-blue-slime", { start: 8, end: 11 })
         });
 
         this.sprite.setCircle(12, 4, 4);
 
         this.scene.physics.add.collider(this.player.sprite, this.sprite, () => {
-            // if (this.player.isPlayingAttackAnimation) {
-            //     this.hit();
-            //     //this.stats.current.hp -= this.player.stats.base.atk;
-            // }
-            this.hit();
+            this.attack();
         });
 
         return this;
@@ -75,17 +66,17 @@ class BlueSlime extends Enemy {
             let { x, y } = vector2player.normalize();
             this.sprite.setVelocity(x * this.speed, y * this.speed);
             this.sprite.setFlipX(x != 0 ? (x > 0) : this.sprite.flipX);
-            if (!this.isPlayingHitAnimation) this.sprite.play("move", true);
+            if (!this.isPlayingHitAnimation) this.sprite.play("blue-slime-move", true);
         } else {
             this.sprite.setVelocity(0, 0);
-            if (!this.isPlayingHitAnimation) this.sprite.play("normal", true);
+            if (!this.isPlayingHitAnimation) this.sprite.play("blue-slime-normal", true);
         }
 
         
     }
 
-    hit() {
-        this.sprite.play("hit", true).on(Phaser.Animations.Events.ANIMATION_COMPLETE, () => this.isPlayingHitAnimation = false);
+    attack() {
+        this.sprite.play("blue-slime-attack", true).on(Phaser.Animations.Events.ANIMATION_COMPLETE, () => this.isPlayingHitAnimation = false);
         this.isPlayingHitAnimation = true;
     }
 }

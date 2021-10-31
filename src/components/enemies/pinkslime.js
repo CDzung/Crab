@@ -1,4 +1,4 @@
-class GreenSlime extends Enemy {
+class PinkSlime extends Enemy {
     constructor(scene, x, y, player) {
         super(scene, x, y, player);
 
@@ -8,9 +8,9 @@ class GreenSlime extends Enemy {
     }
 
     preload() {
-        this.scene.load.spritesheet("spritesheet-green-slime", "assets/spritesheet-green-slime.png", {
-            frameWidth: 96,
-            frameHeight: 96
+        this.scene.load.spritesheet("spritesheet-pink-slime", "assets/spritesheet-pink-slime.png", {
+            frameWidth: 44,
+            frameHeight: 44
         });
 
         return this;
@@ -18,24 +18,25 @@ class GreenSlime extends Enemy {
 
     create() {
         this.scene.anims.create({
-            key: "green-slime-normal",
+            key: "pink-slime-normal",
             frameRate: 10,
             repeat: -1,
-            frames: this.scene.anims.generateFrameNumbers("spritesheet-green-slime", { start: 0, end: 3 })
+            frames: this.scene.anims.generateFrameNumbers("spritesheet-pink-slime", { start: 0, end: 9 })
         });
+
 
         this.scene.anims.create({
-            key: "green-slime-attack",
+            key: "pink-slime-hit",
             frameRate: 10,
-            frames: this.scene.anims.generateFrameNumbers("spritesheet-green-slime", { start: 16, end: 23 })
+            frames: this.scene.anims.generateFrameNumbers("spritesheet-pink-slime", { start: 10, end: 14 })
         });
 
-        this.sprite.setCircle(10, 38, 38);
-
-        //this.sprite.setCollideWorldBounds(true);
+        this.sprite.setCircle(14, 8, 14);
 
         this.scene.physics.add.collider(this.player.sprite, this.sprite, () => {
-            this.attack();
+            if (this.player.isPlayingAttackAnimation) {
+                this.hit();
+            }
         });
 
         return this;
@@ -61,26 +62,15 @@ class GreenSlime extends Enemy {
             let { x, y } = vector2player.normalize();
             this.sprite.setVelocity(x * this.speed, y * this.speed);
             this.sprite.setFlipX(x != 0 ? (x > 0) : this.sprite.flipX);
-        } else if (!this.isPlayingHitAnimation)  {
+        } else {
             this.sprite.setVelocity(0, 0);
         }
 
-        if (!this.isPlayingHitAnimation) this.sprite.play("green-slime-normal", true);
-        else {
-            const vecNor = vector2player.normalize();
-
-            if (vector2player.length() < 30) {
-                this.player.sprite.setVelocity(vecNor.x * 400, vecNor.y * 400);
-            }
-        }
+        if (!this.isPlayingHitAnimation) this.sprite.play("pink-slime-normal", true);
     }
 
-    attack() {
-        this.sprite.setCircle(30, 18, 18);
-        this.sprite.play("green-slime-attack", true).on(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
-            this.isPlayingHitAnimation = false;
-            this.sprite.setCircle(10, 38, 38);
-        });
+    hit() {
+        this.sprite.play("pink-slime-hit", true).on(Phaser.Animations.Events.ANIMATION_COMPLETE, () => this.isPlayingHitAnimation = false);
         this.isPlayingHitAnimation = true;
     }
 }
