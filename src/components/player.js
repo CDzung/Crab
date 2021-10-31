@@ -102,7 +102,7 @@ class Player extends Entity {
             frames: this.scene.anims.generateFrameNumbers("player-spritesheet", { start: 12, end: 15 })
         });
 
-        this.sprite.setBodySize(14, 10, true).setOffset(9, 22);
+        this.sprite.setBodySize(14, 10, true).setOffset(9, 22).setPushable(false);
 
         return this;
     }

@@ -7,7 +7,6 @@ class Tutorial extends Phaser.Scene {
         this.player = new Player(this, -100, -100).preload();
         this.enemy1 = new BlueSlime(this, 400, 100, this.player).preload();
         this.enemy2 = new BlueSlime(this, 300, -200, this.player).preload();
-        
         this.enemy3 = new GreenSlime(this, -200, 100, this.player).preload();
 
         this.load.image("tileset", "assets/tileset.png");
@@ -16,14 +15,22 @@ class Tutorial extends Phaser.Scene {
 
     create() {
         this.player.create();
+
         this.enemy1.create();
         this.enemy2.create();
-        
         this.enemy3.create();
 
-        this.physics.add.collider(this.enemy1.sprite, this.enemy2.sprite)
-        this.physics.add.collider(this.enemy2.sprite, this.enemy3.sprite)
-        this.physics.add.collider(this.enemy3.sprite, this.enemy1.sprite)
+        var gr = this.physics.add.group([
+            this.enemy1.sprite,
+            this.enemy2.sprite,
+            this.enemy3.sprite
+        ]);
+
+        this.physics.add.collider(gr, gr);
+
+        // this.physics.add.collider(this.enemy1.sprite, )
+        // this.physics.add.collider(this.enemy2.sprite, this.enemy3.sprite)
+        // this.physics.add.collider(this.enemy3.sprite, this.enemy1.sprite)
 
         const map = this.add.tilemap("map");
         const tileset = map.addTilesetImage("tileset");
