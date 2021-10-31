@@ -1,4 +1,4 @@
-class Slime extends Enemy {
+class BlueSlime extends Enemy {
     constructor(scene, x, y, player) {
         super(scene, x, y, player);
 
@@ -8,9 +8,14 @@ class Slime extends Enemy {
     }
 
     preload() {
-        this.scene.load.spritesheet("slime-spritesheet", "assets/slime-spritesheet.png", {
-            frameWidth: 44,
-            frameHeight: 44
+        this.scene.load.spritesheet("slime-spritesheet", "assets/slime-Sheet.png", {
+            frameWidth: 32,
+            frameHeight: 25
+        });
+
+        this.scene.load.spritesheet("green-slime", "assets/Slime_Sapp_Sheet_01.png", {
+            frameWidth: 96,
+            frameHeight: 112
         });
 
         return this;
@@ -21,22 +26,30 @@ class Slime extends Enemy {
             key: "normal",
             frameRate: 10,
             repeat: -1,
-            frames: this.scene.anims.generateFrameNumbers("slime-spritesheet", { start: 0, end: 9 })
+            frames: this.scene.anims.generateFrameNumbers("slime-spritesheet", { start: 0, end: 3 })
+        });
+
+        this.scene.anims.create({
+            key: "move",
+            frameRate: 10,
+            repeat: -1,
+            frames: this.scene.anims.generateFrameNumbers("slime-spritesheet", { start: 4, end: 7 })
         });
 
         this.scene.anims.create({
             key: "hit",
             frameRate: 10,
-            frames: this.scene.anims.generateFrameNumbers("slime-spritesheet", { start: 10, end: 14 })
+            frames: this.scene.anims.generateFrameNumbers("slime-spritesheet", { start: 8, end: 11 })
         });
 
-        this.sprite.setCircle(16, 4, 12);
+        this.sprite.setCircle(12, 4, 4);
 
         this.scene.physics.add.collider(this.player.sprite, this.sprite, () => {
-            if (this.player.isPlayingAttackAnimation) {
-                this.hit();
-                //this.stats.current.hp -= this.player.stats.base.atk;
-            }
+            // if (this.player.isPlayingAttackAnimation) {
+            //     this.hit();
+            //     //this.stats.current.hp -= this.player.stats.base.atk;
+            // }
+            this.hit();
         });
 
         return this;
@@ -58,13 +71,17 @@ class Slime extends Enemy {
             }
         }
 
-        if (vector2player.length() < this.focusRange) {
+        if (vector2player.length() < this.focusRange) { 
             let { x, y } = vector2player.normalize();
             this.sprite.setVelocity(x * this.speed, y * this.speed);
             this.sprite.setFlipX(x != 0 ? (x > 0) : this.sprite.flipX);
-        } else this.sprite.setVelocity(0, 0);
+            if (!this.isPlayingHitAnimation) this.sprite.play("move", true);
+        } else {
+            this.sprite.setVelocity(0, 0);
+            if (!this.isPlayingHitAnimation) this.sprite.play("normal", true);
+        }
 
-        if (!this.isPlayingHitAnimation) this.sprite.play("normal", true);
+        
     }
 
     hit() {

@@ -18,7 +18,7 @@ window.addEventListener("load", (ev) => {
             default: "arcade",  // loại cơ chế vật lý là arcade
             arcade: {
                 gravity: {},    // trọng lực = 0
-                debug: true     // mở debug để thấy collision box của các vật thể
+                debug: false     // mở debug để thấy collision box của các vật thể
             }
         },
 
