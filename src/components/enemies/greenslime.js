@@ -70,7 +70,7 @@ class GreenSlime extends Enemy {
             const vecNor = vector2player.normalize();
 
             if (vector2player.length() < 30) {
-                this.player.sprite.setVelocity(vecNor.x * 400, vecNor.y * 400);
+                this.player.sprite.setVelocity(vecNor.x * 1000, vecNor.y * 1000);
             }
         }
     }

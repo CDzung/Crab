@@ -11,9 +11,12 @@ class Tutorial extends Phaser.Scene {
 
         this.load.image("tileset", "assets/tileset.png");
         this.load.tilemapTiledJSON("map", "assets/maps/tutorial.json");
+        this.load.audio("theme-song", "assets/audio/theme-song.mp3");
+        
     }
 
     create() {
+        this.sound.add("theme-song").play();
         this.player.create();
 
         this.enemy1.create();

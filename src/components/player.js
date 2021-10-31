@@ -65,6 +65,7 @@ class Player extends Entity {
     }
 
     preload() {
+        this.scene.load.audio("punch", "assets/audio/punch.mp3");
         this.scene.load.spritesheet("player-spritesheet", "assets/crab-basic-spritesheet.png", {
             frameWidth: 32,
             frameHeight: 32
@@ -74,6 +75,7 @@ class Player extends Entity {
     }
 
     create() {
+        this.punch_sound= this.scene.sound.add("punch", {loop : false})
         this.scene.anims.create({
             key: "idle",
             frameRate: 10,
@@ -108,6 +110,7 @@ class Player extends Entity {
     }
 
     attack() {
+        
         this.sprite.play("attack").on(Phaser.Animations.Events.ANIMATION_COMPLETE, () => this.isPlayingAttackAnimation = false);
         this.cooldown.attack.current_time = 0;
         this.isPlayingAttackAnimation = true;
@@ -132,6 +135,7 @@ class Player extends Entity {
         }
 
         if (this.input.attack.isDown && this.cooldown.isReadyToAttack()) {
+            this.punch_sound.play();
             this.attack();
         }
 
