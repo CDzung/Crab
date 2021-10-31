@@ -4,8 +4,11 @@ class Tutorial extends Phaser.Scene {
     }
 
     preload() {
-        this.player = new Player(this, 20, 20).preload();
-        this.enemy = new Slime(this, 100, 100, this.player).preload();
+        this.player = new Player(this, -100, -100).preload();
+        this.enemy1 = new BlueSlime(this, 400, 100, this.player).preload();
+        this.enemy2 = new BlueSlime(this, 300, -200, this.player).preload();
+        
+        this.enemy3 = new GreenSlime(this, -200, 100, this.player).preload();
 
         this.load.image("tileset", "assets/tileset.png");
         this.load.tilemapTiledJSON("map", "assets/maps/tutorial.json");
@@ -13,7 +16,15 @@ class Tutorial extends Phaser.Scene {
 
     create() {
         this.player.create();
-        this.enemy.create();
+        this.enemy1.create();
+        this.enemy2.create();
+        
+        this.enemy3.create();
+
+        this.physics.add.collider(this.enemy1.sprite, this.enemy2.sprite)
+        this.physics.add.collider(this.enemy2.sprite, this.enemy3.sprite)
+        this.physics.add.collider(this.enemy3.sprite, this.enemy1.sprite)
+
         const map = this.add.tilemap("map");
         const tileset = map.addTilesetImage("tileset");
         map.createLayer("TL1", tileset);
@@ -22,6 +33,8 @@ class Tutorial extends Phaser.Scene {
 
     update() {
         this.player.update();
-        this.enemy.update();
+        this.enemy1.update();
+        this.enemy2.update();
+        this.enemy3.update();
     }
 }
