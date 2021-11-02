@@ -16,7 +16,7 @@ class Tutorial extends Phaser.Scene {
     }
 
     create() {
-        this.sound.add("theme-song").play();
+        this.theme_song = this.sound.add("theme-song");
         this.player.create();
 
         this.enemy1.create();
@@ -31,14 +31,12 @@ class Tutorial extends Phaser.Scene {
 
         this.physics.add.collider(gr, gr);
 
-        // this.physics.add.collider(this.enemy1.sprite, )
-        // this.physics.add.collider(this.enemy2.sprite, this.enemy3.sprite)
-        // this.physics.add.collider(this.enemy3.sprite, this.enemy1.sprite)
-
         const map = this.add.tilemap("map");
         const tileset = map.addTilesetImage("tileset");
         map.createLayer("TL1", tileset);
         map.createLayer("TL2", tileset);
+
+        this.theme_song.play();
     }
 
     update() {
