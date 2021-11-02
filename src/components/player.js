@@ -12,7 +12,13 @@ class Player extends Entity {
             "burst": this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L)
         };
 
-        this.camera = this.scene.cameras.getCamera("").startFollow(this.sprite);
+
+        this.dummy = {
+            "sprite": this.scene.physics.add.sprite(this.sprite.x, this.sprite.y, null),
+            "speed": 4
+        };
+
+        this.camera = this.scene.cameras.getCamera("").startFollow(this.dummy.sprite);
         this.camera_zoom = 1;
 
         this.scene.input.on("wheel", (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
@@ -75,7 +81,7 @@ class Player extends Entity {
     }
 
     create() {
-        this.punch_sound= this.scene.sound.add("punch", {loop : false})
+        this.punch_sound = this.scene.sound.add("punch", { loop: false })
         this.scene.anims.create({
             key: "idle",
             frameRate: 10,
@@ -110,7 +116,7 @@ class Player extends Entity {
     }
 
     attack() {
-        
+
         this.sprite.play("attack").on(Phaser.Animations.Events.ANIMATION_COMPLETE, () => this.isPlayingAttackAnimation = false);
         this.cooldown.attack.current_time = 0;
         this.isPlayingAttackAnimation = true;
@@ -147,6 +153,13 @@ class Player extends Entity {
             }
         }
 
+        // dummy follow sprite
+        let vector2player = {
+            x: this.sprite.x - this.dummy.sprite.x,
+            y: this.sprite.y - this.dummy.sprite.y
+        };
+
+        this.dummy.sprite.setVelocity(vector2player.x * this.dummy.speed, vector2player.y * this.dummy.speed);
         return this;
     }
 }
